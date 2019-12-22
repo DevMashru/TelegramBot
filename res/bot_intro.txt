@@ -1,0 +1,7 @@
+ALPHA = FEATURES MAY NOT WORK
+#weatherUpdate cityName: Current weather in any city!
+#newsUpdate: Top International News
+#admins: Get the admins of the current group
+/kick(reply to person's message) - Kicks user from Group (you should be an Admin!)
+Any Suggestions, contact @AnantaSrikar
+Bot by @AnantaSrikar

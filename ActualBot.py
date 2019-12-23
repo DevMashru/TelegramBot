@@ -1,5 +1,6 @@
 from telegram.ext import Updater
 from telegram.ext import CommandHandler, MessageHandler, Filters
+import telegram
 import logging
 import requests
 
@@ -105,9 +106,15 @@ def messages(update, context):
     
     elif(update.message.text.startswith('#indNews')):
         reply_to_message(update, context, indianNews())
+    
+    elif(update.message.text.startswith('#admins')):
+        admins = context.bot.get_chat_administrators(update.message.chat.id) #admins[i].user.mention_markdown()
+        for i in range (0, len(admins)):
+            context.bot.send_message(update.effective_chat.id, admins[i].user.mention_markdown() , reply_to_message_id = update.message.message_id, parse_mode=telegram.ParseMode.MARKDOWN)
 
 dispatcher.add_handler(CommandHandler('start', start))
 dispatcher.add_handler(CommandHandler('help', help))
 dispatcher.add_handler(MessageHandler(Filters.text, messages))
 
 updater.start_polling()
+#TODO : bot.send_chat_action(chat_id=chat_id, action=telegram.ChatAction.TYPING) - Bot is typing

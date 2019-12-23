@@ -102,6 +102,9 @@ def messages(update, context):
     
     elif(update.message.text.startswith('#intNews')):
         reply_to_message(update, context, NewsFromBBC())
+    
+    elif(update.message.text.startswith('#indNews')):
+        reply_to_message(update, context, indianNews())
 
 dispatcher.add_handler(CommandHandler('start', start))
 dispatcher.add_handler(CommandHandler('help', help))

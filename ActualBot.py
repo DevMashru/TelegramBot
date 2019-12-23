@@ -87,7 +87,7 @@ def reply_to_message(update, context, message):
     context.bot.send_message(update.effective_chat.id, message, reply_to_message_id = update.message.message_id)
 
 def start(update, context):
-    update.message.reply_text("I'm a bot, please talk to me!")
+    update.message.reply_text("Yeah, I'm still awake!! ;)")
 
 def help(update, context):
     fileManager = open('res/bot_intro.txt', 'r')
@@ -99,6 +99,9 @@ def messages(update, context):
     if(update.message.text.startswith('#weatherUpdate')):
         city = update.message.text[15:]
         reply_to_message(update, context, return_weather(city))
+    
+    elif(update.message.text.startswith('#intNews')):
+        reply_to_message(update, context, NewsFromBBC())
 
 dispatcher.add_handler(CommandHandler('start', start))
 dispatcher.add_handler(CommandHandler('help', help))

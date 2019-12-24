@@ -12,7 +12,7 @@ def getTokens():
     tokens = tokenText.split('\n')
 
 def NewsFromBBC(): 
-    
+
     main_url = " https://newsapi.org/v1/articles?source=bbc-news&sortBy=top&apiKey={}".format(tokens[0])
     
     open_bbc_page = requests.get(main_url).json() 
@@ -87,6 +87,27 @@ def welcome_member(update, context):
     for i in range (0, len(update.message.new_chat_members)):
         update.message.reply_text('Welcome to {} '.format(update.message.chat.title) + update.message.new_chat_members[i].mention_markdown(), parse_mode = markdown)
 
+def kick_member(update, context):
+    admins = context.bot.get_chat_administrators(update.message.chat.id)
+    isUserAdmin = False
+    isToBeKickedAdmin = False
+    for i in range(0,len(admins)):
+            if(admins[i].user.id == update.message.from_user.id):
+                isUserAdmin = True
+            if(admins[i].user.id == update.message.reply_to_message.from_user.id):
+                isToBeKickedAdmin = True
+            if(isUserAdmin and isToBeKickedAdmin):
+                break
+    if(isUserAdmin):
+        if(not isToBeKickedAdmin):
+            context.bot.kick_chat_member(update.message.chat.id, update.message.reply_to_message.from_user.id)
+            update.message.reply_text("Kicked " + update.message.reply_to_message.from_user.mention_markdown(), parse_mode = markdown)
+        else:
+            update.message.reply_text("Cannot kick " +  update.message.reply_to_message.from_user.mention_markdown()+ " as they are administrators", parse_mode = markdown)
+
+    else:
+        update.message.reply_text("Sorry, you're not an Admin!")
+
 def messages(update, context):
     if(update.message.text.startswith('#weatherUpdate')):
         city = update.message.text[15:]
@@ -105,6 +126,7 @@ def messages(update, context):
 
 dispatcher.add_handler(CommandHandler('start', start))
 dispatcher.add_handler(CommandHandler('help', help))
+dispatcher.add_handler(CommandHandler('kick', kick_member))
 dispatcher.add_handler(MessageHandler(Filters.text, messages))
 dispatcher.add_handler(MessageHandler(Filters.status_update.new_chat_members, welcome_member))
 

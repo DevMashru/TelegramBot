@@ -87,6 +87,9 @@ def welcome_member(update, context):
     for i in range (0, len(update.message.new_chat_members)):
         update.message.reply_text('Welcome to {} '.format(update.message.chat.title) + update.message.new_chat_members[i].mention_markdown(), parse_mode = markdown)
 
+def goodbye_member(update, context):
+    context.bot.send_message(update.message.left_chat_member.id, text = 'Goodbye ' + update.message.left_chat_member.name + '\nHope to see you back in The {} group ;)'.format(update.message.chat.title))
+
 def kick_member(update, context):
     admins = context.bot.get_chat_administrators(update.message.chat.id)
     isUserAdmin = False
@@ -129,6 +132,7 @@ dispatcher.add_handler(CommandHandler('help', help))
 dispatcher.add_handler(CommandHandler('kick', kick_member))
 dispatcher.add_handler(MessageHandler(Filters.text, messages))
 dispatcher.add_handler(MessageHandler(Filters.status_update.new_chat_members, welcome_member))
+dispatcher.add_handler(MessageHandler(Filters.status_update.left_chat_member, goodbye_member))
 
 updater.start_polling()
 #TODO : bot.send_chat_action(chat_id=chat_id, action=telegram.ChatAction.TYPING) - Bot is typing

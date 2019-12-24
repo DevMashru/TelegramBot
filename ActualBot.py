@@ -126,6 +126,12 @@ def messages(update, context):
         admins = context.bot.get_chat_administrators(update.message.chat.id)
         for i in range (0, len(admins)):
             update.message.reply_text(admins[i].user.mention_markdown(), parse_mode = markdown)
+    
+    if (update.message.text.lower().startswith('hey') or update.message.text.lower().startswith('hi') or update.message.text.lower().startswith('sup')):
+        update.message.reply_text('Wassup ' + update.message.from_user.mention_markdown(), parse_mode = markdown)
+    
+    elif (update.message.text.lower().startswith('gn')):
+        update.message.reply_text('Good Night ' + update.message.from_user.mention_markdown(), parse_mode = markdown)
 
 dispatcher.add_handler(CommandHandler('start', start))
 dispatcher.add_handler(CommandHandler('help', help))

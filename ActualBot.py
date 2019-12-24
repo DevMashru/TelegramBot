@@ -96,6 +96,10 @@ def help(update, context):
     update.message.reply_text(bot_intro)
     fileManager.close()
 
+def welcome_member(update, context):
+    for i in range (0, len(update.message.new_chat_members)):
+        context.bot.send_message(update.effective_chat.id, 'Welcome to {} '.format(update.message.chat.title) + update.message.new_chat_members[i].mention_markdown(), reply_to_message_id = update.message.message_id, parse_mode = telegram.ParseMode.MARKDOWN)
+
 def messages(update, context):
     if(update.message.text.startswith('#weatherUpdate')):
         city = update.message.text[15:]
@@ -115,6 +119,7 @@ def messages(update, context):
 dispatcher.add_handler(CommandHandler('start', start))
 dispatcher.add_handler(CommandHandler('help', help))
 dispatcher.add_handler(MessageHandler(Filters.text, messages))
+dispatcher.add_handler(MessageHandler(Filters.status_update.new_chat_members, welcome_member))
 
 updater.start_polling()
 #TODO : bot.send_chat_action(chat_id=chat_id, action=telegram.ChatAction.TYPING) - Bot is typing

@@ -133,6 +133,9 @@ def messages(update, context):
     elif (update.message.text.lower().startswith('gn')):
         update.message.reply_text('Good Night ' + update.message.from_user.mention_markdown(), parse_mode = markdown)
 
+    elif ('ok boomer' in update.message.text.lower() or 'boomer' in update.message.text.lower()):
+        context.bot.send_photo(update.message.chat.id, photo = open('res/ok_boomer.jpg', 'rb'), reply_to_message_id = update.message.message_id)
+
 dispatcher.add_handler(CommandHandler('start', start))
 dispatcher.add_handler(CommandHandler('help', help))
 dispatcher.add_handler(CommandHandler('kick', kick_member))

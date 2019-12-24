@@ -1,9 +1,8 @@
 from telegram.ext import Updater
 from telegram.ext import CommandHandler, MessageHandler, Filters
-import telegram
 import logging
 import requests
-
+markdown = "Markdown" 
 tokens = [] 
 
 def getTokens():
@@ -14,18 +13,11 @@ def getTokens():
 
 def NewsFromBBC(): 
     
-    # BBC news api 
     main_url = " https://newsapi.org/v1/articles?source=bbc-news&sortBy=top&apiKey={}".format(tokens[0])
-  
-    # fetching data in json format 
+    
     open_bbc_page = requests.get(main_url).json() 
-  
-    # getting all articles in a string article 
     article = open_bbc_page["articles"] 
 
-  
-    # empty list which will  
-    # contain all trending news 
     results = [] 
     data = ''
       
@@ -33,9 +25,7 @@ def NewsFromBBC():
         results.append(ar['title']) 
           
     for i in range(len(results)): 
-          
-        # printing all trending news 
-        #print(i + 1, results[i])
+        # printing all trending news
         data = data + str(i+1) + ') ' + str(results[i]) + '\n'
     
     return data
@@ -84,9 +74,6 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 updater = Updater(token = tokens[2], use_context = True)
 dispatcher = updater.dispatcher
 
-def reply_to_message(update, context, message):
-    context.bot.send_message(update.effective_chat.id, message, reply_to_message_id = update.message.message_id)
-
 def start(update, context):
     update.message.reply_text("Yeah, I'm still awake!! ;)")
 
@@ -98,23 +85,23 @@ def help(update, context):
 
 def welcome_member(update, context):
     for i in range (0, len(update.message.new_chat_members)):
-        context.bot.send_message(update.effective_chat.id, 'Welcome to {} '.format(update.message.chat.title) + update.message.new_chat_members[i].mention_markdown(), reply_to_message_id = update.message.message_id, parse_mode = telegram.ParseMode.MARKDOWN)
+        update.message.reply_text('Welcome to {} '.format(update.message.chat.title) + update.message.new_chat_members[i].mention_markdown(), parse_mode = markdown)
 
 def messages(update, context):
     if(update.message.text.startswith('#weatherUpdate')):
         city = update.message.text[15:]
-        reply_to_message(update, context, return_weather(city))
+        update.message.reply_text(return_weather(city))
     
     elif(update.message.text.startswith('#intNews')):
-        reply_to_message(update, context, NewsFromBBC())
+        update.message.reply_text(NewsFromBBC())
     
     elif(update.message.text.startswith('#indNews')):
-        reply_to_message(update, context, indianNews())
+        update.message.reply_text(indianNews())
     
     elif(update.message.text.startswith('#admins')):
-        admins = context.bot.get_chat_administrators(update.message.chat.id) #admins[i].user.mention_markdown()
+        admins = context.bot.get_chat_administrators(update.message.chat.id)
         for i in range (0, len(admins)):
-            context.bot.send_message(update.effective_chat.id, admins[i].user.mention_markdown() , reply_to_message_id = update.message.message_id, parse_mode=telegram.ParseMode.MARKDOWN)
+            update.message.reply_text(admins[i].user.mention_markdown(), parse_mode = markdown)
 
 dispatcher.add_handler(CommandHandler('start', start))
 dispatcher.add_handler(CommandHandler('help', help))

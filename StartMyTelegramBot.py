@@ -17,19 +17,12 @@ def getTokens():
     tokens = tokenText.split('\n')
 
 def NewsFromBBC(): 
-    
-    # BBC news api 
     main_url = " https://newsapi.org/v1/articles?source=bbc-news&sortBy=top&apiKey={}".format(tokens[0])
   
-    # fetching data in json format 
     open_bbc_page = requests.get(main_url).json() 
   
-    # getting all articles in a string article 
     article = open_bbc_page["articles"] 
 
-  
-    # empty list which will  
-    # contain all trending news 
     results = [] 
     data = ''
       
@@ -37,9 +30,6 @@ def NewsFromBBC():
         results.append(ar['title']) 
           
     for i in range(len(results)): 
-          
-        # printing all trending news 
-        #print(i + 1, results[i])
         data = data + str(i+1) + ') ' + str(results[i]) + '\n'
     
     return data

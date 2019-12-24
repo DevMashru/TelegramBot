@@ -124,7 +124,6 @@ def kick_user(message):
 
     else:
         bot.reply_to(message, "Sorry, you're not an Admin!")
-        #TODO : Admins can't kick themselves
 
 @bot.message_handler(func=lambda msg : msg.text is not None and '#' in msg.text) #special commands
 def send_reply(message):

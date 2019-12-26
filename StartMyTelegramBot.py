@@ -124,8 +124,10 @@ def messages(update, context):
     
     elif(update.message.text.startswith('#admins')):
         admins = context.bot.get_chat_administrators(update.message.chat.id)
+        adminText = 'The admins of {} are :\n'.format(update.message.chat.title)
         for i in range (0, len(admins)):
-            update.message.reply_text(admins[i].user.mention_markdown(), parse_mode = markdown)
+            adminText = adminText + admins[i].user.mention_markdown() + '\n'
+        update.message.reply_text(adminText, parse_mode = markdown)
     
     if (update.message.text.lower().startswith('hey') or update.message.text.lower().startswith('hi') or update.message.text.lower().startswith('sup')):
         update.message.reply_text('Wassup ' + update.message.from_user.mention_markdown(), parse_mode = markdown)

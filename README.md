@@ -1,5 +1,5 @@
 # Telegram Chatbot
-Made using [pyTelegramBotAPI](https://pypi.org/project/pyTelegramBotAPI/0.3.0/).
+Made using [python-telegram-bot 12.2.0](https://pypi.org/project/python-telegram-bot/).
 Still in development, hosted on my Raspberry Pi 4 ;)
 
 # Functions:

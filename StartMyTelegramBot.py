@@ -128,6 +128,9 @@ def messages(update, context):
         for i in range (0, len(admins)):
             adminText = adminText + admins[i].user.mention_markdown() + '\n'
         update.message.reply_text(adminText, parse_mode = markdown)
+
+    elif(update.message.text.startswith('#members')):
+        update.message.reply_text("Sorry, my API doesn't allow that. But I can tell you the total no of members : {}".format(context.bot.get_chat_members_count(update.message.chat.id)))
     
     if (update.message.text.lower().startswith('hey') or update.message.text.lower().startswith('hi') or update.message.text.lower().startswith('sup')):
         update.message.reply_text('Wassup ' + update.message.from_user.mention_markdown(), parse_mode = markdown)

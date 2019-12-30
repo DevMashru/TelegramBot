@@ -6,9 +6,10 @@ Created on Sat Dec 22 07:32:12 2019
 """
 from telegram.ext import Updater
 from telegram.ext import CommandHandler, MessageHandler, Filters
-import telegram
 import logging
 import requests
+
+typing = 'typing'
 markdown = "Markdown" 
 tokens = [] 
 
@@ -119,26 +120,30 @@ def kick_member(update, context):
         update.message.reply_text("Sorry, you're not an Admin!")
 
 def messages(update, context):
-    if(update.message.text.startswith('#weatherUpdate')):
-        city = update.message.text[15:]
-        context.bot.send_chat_action(chat_id = update.message.chat.id, action = telegram.ChatAction.TYPING)
-        update.message.reply_text(return_weather(city))
+    if(update.message.text.startswith('#')):
+        context.bot.send_chat_action(chat_id = update.message.chat.id, action = typing)
+        if(update.message.text.startswith('#weatherUpdate')):
+            city = update.message.text[15:]
+            update.message.reply_text(return_weather(city))
     
-    elif(update.message.text.startswith('#intNews')):
-        update.message.reply_text(NewsFromBBC())
+        elif(update.message.text.startswith('#intNews')):
+            update.message.reply_text(NewsFromBBC())
     
-    elif(update.message.text.startswith('#indNews')):
-        update.message.reply_text(indianNews())
+        elif(update.message.text.startswith('#indNews')):
+            update.message.reply_text(indianNews())
     
-    elif(update.message.text.startswith('#admins')):
-        admins = context.bot.get_chat_administrators(update.message.chat.id)
-        adminText = 'The admins of {} are :\n'.format(update.message.chat.title)
-        for i in range (0, len(admins)):
-            adminText = adminText + admins[i].user.mention_markdown() + '\n'
-        update.message.reply_text(adminText, parse_mode = markdown)
+        elif(update.message.text.startswith('#admins')):
+            admins = context.bot.get_chat_administrators(update.message.chat.id)
+            adminText = 'The admins of {} are :\n'.format(update.message.chat.title)
+            for i in range (0, len(admins)):
+                adminText = adminText + admins[i].user.mention_markdown() + '\n'
+            update.message.reply_text(adminText, parse_mode = markdown)
 
-    elif(update.message.text.startswith('#members')):
-        update.message.reply_text("Sorry, my API doesn't allow that. But I can tell you the total no of members : {}".format(context.bot.get_chat_members_count(update.message.chat.id)))
+        elif(update.message.text.startswith('#members')):
+            update.message.reply_text("Sorry, my API doesn't allow that. But I can tell you the total no of members : {}".format(context.bot.get_chat_members_count(update.message.chat.id)))
+    
+        else:
+            update.message.reply_text("Sorry, I still don't know that command")
     
     if (update.message.text.lower().startswith('hey') or update.message.text.lower().startswith('hi') or update.message.text.lower().startswith('sup')):
         update.message.reply_text('Wassup ' + update.message.from_user.mention_markdown(), parse_mode = markdown)
@@ -157,4 +162,3 @@ dispatcher.add_handler(MessageHandler(Filters.status_update.new_chat_members, we
 dispatcher.add_handler(MessageHandler(Filters.status_update.left_chat_member, goodbye_member))
 
 updater.start_polling()
-#TODO : bot.send_chat_action(chat_id=chat_id, action=telegram.ChatAction.TYPING) - Bot is typing

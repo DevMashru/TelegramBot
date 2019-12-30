@@ -6,6 +6,7 @@ Created on Sat Dec 22 07:32:12 2019
 """
 from telegram.ext import Updater
 from telegram.ext import CommandHandler, MessageHandler, Filters
+import telegram
 import logging
 import requests
 markdown = "Markdown" 
@@ -120,6 +121,7 @@ def kick_member(update, context):
 def messages(update, context):
     if(update.message.text.startswith('#weatherUpdate')):
         city = update.message.text[15:]
+        context.bot.send_chat_action(chat_id = update.message.chat.id, action = telegram.ChatAction.TYPING)
         update.message.reply_text(return_weather(city))
     
     elif(update.message.text.startswith('#intNews')):

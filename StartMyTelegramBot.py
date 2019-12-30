@@ -141,7 +141,7 @@ def messages(update, context):
     if (update.message.text.lower().startswith('hey') or update.message.text.lower().startswith('hi') or update.message.text.lower().startswith('sup')):
         update.message.reply_text('Wassup ' + update.message.from_user.mention_markdown(), parse_mode = markdown)
     
-    elif (update.message.text.lower().startswith('gn')):
+    elif (update.message.text.lower().startswith('gn') or 'good night' in update.message.text.lower()):
         update.message.reply_text('Good Night ' + update.message.from_user.mention_markdown(), parse_mode = markdown)
 
     elif ('ok boomer' in update.message.text.lower() or 'boomer' in update.message.text.lower()):

@@ -14,3 +14,9 @@ Still in development, hosted on my Raspberry Pi 4 ;)
 Also wishes good night, and replies back when you initiate chat like "Hey" or "Hi"
 
 Also has some small Easter eggs (try sending ok boomer)
+
+# APIs
+Below are the list of APIs used in the Telegram Bot:
+* [python-telegram-bot 12.2.0](https://pypi.org/project/python-telegram-bot/) - The main API for the bot
+* [News API](https://newsapi.org/) - API for latest news
+* [OpenWeather](https://openweathermap.org/api) - API for latest weather

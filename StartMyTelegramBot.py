@@ -165,3 +165,4 @@ dispatcher.add_handler(MessageHandler(Filters.status_update.new_chat_members, we
 dispatcher.add_handler(MessageHandler(Filters.status_update.left_chat_member, goodbye_member))
 
 updater.start_polling()
+updater.idle() #this will stop the bot gracefully when Ctrl + C is pressed

@@ -72,6 +72,25 @@ def return_weather(city):
         data = 'Please enter a valid city name'
 
     return data
+
+def interact_with_members(update, context):
+    chat_id = update.message.chat_id
+    try:
+        due = 10 #this is the time in seconds
+
+        if 'job' in context.chat_data:
+            old_job = context.chat_data['job']
+            old_job.schedule_removal()
+        new_job = context.job_queue.run_once(notify, due, context=chat_id)
+        context.chat_data['job'] = new_job
+
+    except (IndexError, ValueError):
+        pass #removing this causes indentation error
+
+def notify(context):
+    #Send the interaction message.
+    job = context.job
+    context.bot.send_message(job.context, text='Hey! Y so silent?')
     
 getTokens()
 
@@ -146,6 +165,8 @@ def messages(update, context):
 
     elif ('ok boomer' in update.message.text.lower() or 'boomer' in update.message.text.lower()):
         context.bot.send_photo(update.message.chat.id, photo = open('res/ok_boomer.jpg', 'rb'), reply_to_message_id = update.message.message_id)
+    
+    interact_with_members(update, context)
 
 dispatcher.add_handler(CommandHandler('start', start))
 dispatcher.add_handler(CommandHandler('help', help))
@@ -155,5 +176,6 @@ dispatcher.add_handler(MessageHandler(Filters.status_update.new_chat_members, we
 dispatcher.add_handler(MessageHandler(Filters.status_update.left_chat_member, goodbye_member))
 
 updater.start_polling()
+updater.idle()
 #TODO : bot.send_chat_action(chat_id=chat_id, action=telegram.ChatAction.TYPING) - Bot is typing
 #TODO : add timed messages when nobody is chatting

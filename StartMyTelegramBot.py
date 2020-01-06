@@ -76,7 +76,8 @@ def return_weather(city):
 def interact_with_members(update, context):
     chat_id = update.message.chat_id
     try:
-        due = 10 #this is the time in seconds
+        hrs = 13       #Enter hours after the last message for the bot to interact
+        due = 3600*hrs #this is the time 
 
         if 'job' in context.chat_data:
             old_job = context.chat_data['job']

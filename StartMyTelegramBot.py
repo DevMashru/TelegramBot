@@ -8,8 +8,6 @@ from telegram.ext import Updater
 from telegram.ext import CommandHandler, MessageHandler, Filters
 import logging
 import requests
-
-typing = 'typing'
 markdown = "Markdown" 
 tokens = [] 
 
@@ -79,9 +77,6 @@ getTokens()
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
-
 updater = Updater(token = tokens[2], use_context = True)
 dispatcher = updater.dispatcher
 
@@ -123,35 +118,30 @@ def kick_member(update, context):
         update.message.reply_text("Sorry, you're not an Admin!")
 
 def messages(update, context):
-    if(update.message.text.startswith('#')):
-        context.bot.send_chat_action(chat_id = update.message.chat.id, action = typing)
-        if(update.message.text.startswith('#weatherUpdate')):
-            city = update.message.text[15:]
-            update.message.reply_text(return_weather(city))
+    if(update.message.text.startswith('#weatherUpdate')):
+        city = update.message.text[15:]
+        update.message.reply_text(return_weather(city))
     
-        elif(update.message.text.startswith('#intNews')):
-            update.message.reply_text(NewsFromBBC())
+    elif(update.message.text.startswith('#intNews')):
+        update.message.reply_text(NewsFromBBC())
     
-        elif(update.message.text.startswith('#indNews')):
-            update.message.reply_text(indianNews())
+    elif(update.message.text.startswith('#indNews')):
+        update.message.reply_text(indianNews())
     
-        elif(update.message.text.startswith('#admins')):
-            admins = context.bot.get_chat_administrators(update.message.chat.id)
-            adminText = 'The admins of {} are :\n'.format(update.message.chat.title)
-            for i in range (0, len(admins)):
-                adminText = adminText + admins[i].user.mention_markdown() + '\n'
-            update.message.reply_text(adminText, parse_mode = markdown)
+    elif(update.message.text.startswith('#admins')):
+        admins = context.bot.get_chat_administrators(update.message.chat.id)
+        adminText = 'The admins of {} are :\n'.format(update.message.chat.title)
+        for i in range (0, len(admins)):
+            adminText = adminText + admins[i].user.mention_markdown() + '\n'
+        update.message.reply_text(adminText, parse_mode = markdown)
 
-        elif(update.message.text.startswith('#members')):
-            update.message.reply_text("Sorry, my API doesn't allow that. But I can tell you the total no of members : {}".format(context.bot.get_chat_members_count(update.message.chat.id)))
-    
-        else:
-            update.message.reply_text("Sorry, I still don't know that command")
+    elif(update.message.text.startswith('#members')):
+        update.message.reply_text("Sorry, my API doesn't allow that. But I can tell you the total no of members : {}".format(context.bot.get_chat_members_count(update.message.chat.id)))
     
     if (update.message.text.lower().startswith('hey') or update.message.text.lower().startswith('hi') or update.message.text.lower().startswith('sup')):
         update.message.reply_text('Wassup ' + update.message.from_user.mention_markdown(), parse_mode = markdown)
     
-    elif (update.message.text.lower().startswith('gn') or 'good night' in update.message.text.lower()):
+    elif (update.message.text.lower().startswith('gn')):
         update.message.reply_text('Good Night ' + update.message.from_user.mention_markdown(), parse_mode = markdown)
 
     elif ('ok boomer' in update.message.text.lower() or 'boomer' in update.message.text.lower()):
@@ -165,4 +155,5 @@ dispatcher.add_handler(MessageHandler(Filters.status_update.new_chat_members, we
 dispatcher.add_handler(MessageHandler(Filters.status_update.left_chat_member, goodbye_member))
 
 updater.start_polling()
-updater.idle() #this will stop the bot gracefully when Ctrl + C is pressed
+#TODO : bot.send_chat_action(chat_id=chat_id, action=telegram.ChatAction.TYPING) - Bot is typing
+#TODO : add timed messages when nobody is chatting

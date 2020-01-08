@@ -182,6 +182,7 @@ def main():
     
     # TODO : bot.send_chat_action(chat_id=chat_id, action=telegram.ChatAction.TYPING) - Bot is typing
     # TODO : add timed messages when nobody is chatting
+    # TODO : mute certain members
 
 if __name__ == '__main__':
     main()

@@ -92,13 +92,6 @@ def notify(context):
     #Send the interaction message.
     job = context.job
     context.bot.send_message(job.context, text='Hey! Y so silent?')
-    
-getTokens()
-
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
-
-updater = Updater(token = tokens[2], use_context = True)
-dispatcher = updater.dispatcher
 
 def start(update, context):
     update.message.reply_text("Yeah, I'm still awake!! ;)")
@@ -169,14 +162,26 @@ def messages(update, context):
     
     interact_with_members(update, context)
 
-dispatcher.add_handler(CommandHandler('start', start))
-dispatcher.add_handler(CommandHandler('help', help))
-dispatcher.add_handler(CommandHandler('kick', kick_member))
-dispatcher.add_handler(MessageHandler(Filters.text, messages))
-dispatcher.add_handler(MessageHandler(Filters.status_update.new_chat_members, welcome_member))
-dispatcher.add_handler(MessageHandler(Filters.status_update.left_chat_member, goodbye_member))
+def main():
+    getTokens()
 
-updater.start_polling()
-updater.idle()
-#TODO : bot.send_chat_action(chat_id=chat_id, action=telegram.ChatAction.TYPING) - Bot is typing
-#TODO : add timed messages when nobody is chatting
+    logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+
+    updater = Updater(token = tokens[2], use_context = True)
+    dispatcher = updater.dispatcher
+
+    dispatcher.add_handler(CommandHandler('start', start))
+    dispatcher.add_handler(CommandHandler('help', help))
+    dispatcher.add_handler(CommandHandler('kick', kick_member))
+    dispatcher.add_handler(MessageHandler(Filters.text, messages))
+    dispatcher.add_handler(MessageHandler(Filters.status_update.new_chat_members, welcome_member))
+    dispatcher.add_handler(MessageHandler(Filters.status_update.left_chat_member, goodbye_member))
+    
+    updater.start_polling() # starts the bot
+    updater.idle() # stops the bot gracefully when KeyboadInterrupt is encountered
+    
+    # TODO : bot.send_chat_action(chat_id=chat_id, action=telegram.ChatAction.TYPING) - Bot is typing
+    # TODO : add timed messages when nobody is chatting
+
+if __name__ == '__main__':
+    main()

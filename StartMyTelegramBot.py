@@ -181,8 +181,8 @@ def main():
     updater.idle() # stops the bot gracefully when KeyboadInterrupt is encountered
     
     # TODO : bot.send_chat_action(chat_id=chat_id, action=telegram.ChatAction.TYPING) - Bot is typing
-    # TODO : add timed messages when nobody is chatting
     # TODO : mute certain members
+    # TODO : add polling feature
 
 if __name__ == '__main__':
     main()

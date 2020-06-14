@@ -8,18 +8,17 @@ from telegram.ext import Updater
 from telegram.ext import CommandHandler, MessageHandler, Filters
 import logging
 import requests
+from json import load
+
 markdown = "Markdown" 
-tokens = [] 
 
 def getTokens():
-	fileManager = open('res/TOKENS.txt', 'r')  #make the file in such a way that token[0] is for news, token[1] for weather, token[2] for bot
-	tokenText = fileManager.read()
-	global tokens
-	tokens = tokenText.split('\n')
+	with open("res/TOKENS.json", 'r') as FPtr:
+		return load(FPtr)
 
 def NewsFromBBC(): 
 
-	main_url = " https://newsapi.org/v1/articles?source=bbc-news&sortBy=top&apiKey={}".format(tokens[0])
+	main_url = " https://newsapi.org/v1/articles?source=bbc-news&sortBy=top&apiKey={}".format(getTokens()["news_token"])
 	
 	open_bbc_page = requests.get(main_url).json() 
 	article = open_bbc_page["articles"] 
@@ -38,7 +37,7 @@ def NewsFromBBC():
 
 def indianNews():
 	
-	main_url = "https://newsapi.org/v2/top-headlines?country=in&apiKey={}".format(tokens[0])
+	main_url = "https://newsapi.org/v2/top-headlines?country=in&apiKey={}".format(getTokens()["news_token"])
 
 	news = requests.get(main_url).json()
 
@@ -56,7 +55,7 @@ def indianNews():
 	return data
 
 def return_weather(city):
-	url = 'http://api.openweathermap.org/data/2.5/weather?q={}&appid={}&units=metric'.format(city, tokens[1])
+	url = 'http://api.openweathermap.org/data/2.5/weather?q={}&appid={}&units=metric'.format(city, getTokens()["weather_token"])
 
 	res = requests.get(url)
 
@@ -167,7 +166,7 @@ def main():
 
 	logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
-	updater = Updater(token = tokens[2], use_context = True)
+	updater = Updater(token = getTokens()["bot_token"], use_context = True)
 	dispatcher = updater.dispatcher
 
 	dispatcher.add_handler(CommandHandler('start', start))

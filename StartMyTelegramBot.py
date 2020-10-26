@@ -4,6 +4,7 @@ Created on Sat Dec 22 07:32:12 2019
 
 @author: ANANTA SRIKAR
 """
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater
 from telegram.ext import CommandHandler, MessageHandler, Filters
 import logging
@@ -112,6 +113,7 @@ def kick_member(update, context):
 	admins = context.bot.get_chat_administrators(update.message.chat.id)
 	isUserAdmin = False
 	isToBeKickedAdmin = False
+	botID = 922831097
 	for i in range(0,len(admins)):
 			if(admins[i].user.id == update.message.from_user.id):
 				isUserAdmin = True
@@ -120,10 +122,14 @@ def kick_member(update, context):
 			if(isUserAdmin and isToBeKickedAdmin):
 				break
 	if(isUserAdmin):
-		if(not isToBeKickedAdmin):
+		if(not isToBeKickedAdmin and update.message.reply_to_message.from_user.id != botID):
 			context.bot.kick_chat_member(update.message.chat.id, update.message.reply_to_message.from_user.id)
 			update.message.reply_text("Kicked " + update.message.reply_to_message.from_user.mention_markdown(), parse_mode = markdown)
-		else:
+		elif(update.message.reply_to_message.from_user.id == botID):
+			keyboard = [[InlineKeyboardButton("Watch",url = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ')]]
+			reply_markup = InlineKeyboardMarkup(keyboard)
+			update.message.reply_text("I am not sure if I want to kick myself. Watch this till I decide.", reply_markup = reply_markup)
+		elif(isToBeKickedAdmin):
 			update.message.reply_text("Cannot kick " +  update.message.reply_to_message.from_user.mention_markdown()+ " as they are administrators", parse_mode = markdown)
 
 	else:
